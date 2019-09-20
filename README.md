@@ -13,3 +13,28 @@ Dev Note:
 - possibile integrazione con CompostDDD/messaging lib.
 - warning - [issue](https://github.com/EventSaucePHP/EventSauce/issues/58#event-2643267344) valutare implicazioni... 
 
+
+## Common Task
+- [x] - Create symfony project
+
+- [ ] - Enrich dev enviroment (phpunit phpstan cs-fixer fpp behat?)
+
+- [ ] - Create CI pipeline (define common steps)
+
+- [ ] - Bring in Eventsauce
+
+- [ ] - Bring in CompostDDD (messaging)
+
+- [ ] - Bring in ServiceBus with abstraction (Tactician, Messenger, or EventSauce built-in serviceBus ?)
+
+
+##  Branch based task
+
+
+### TodoApplication
+
+- [ ] - Create new branch and psr namespace
+
+- [ ] - Build a basic user model
+      
+- [ ] - Build a basic task model
