@@ -17,7 +17,7 @@ Dev Note:
 ## Common Task
 - [x] - Create symfony project
 
-- [ ] - Enrich dev enviroment (phpunit phpstan cs-fixer fpp behat?)
+- [ ] - Enrich dev enviroment (phpunit phpstan cs-fixer fpp behat)
 
 - [ ] - Create CI pipeline (define common steps)
 
