@@ -42,6 +42,9 @@ cache:
   - &run-php-cs-fixer-tests |
       vendor/bin/php-cs-fixer fix --dry-run --diff
 
+  - &run-strict-type-php-cs-fixer-tests |
+      vendor/bin/php-cs-fixer fix --dry-run -v --rules=declare_strict_types  --allow-risky=yes
+
   - &run-phpstan-tests |
       vendor/bin/phpstan analyse
 
@@ -55,7 +58,7 @@ install:
 
 script:
   - *clear-test-app-cache
-  
+
   - *run-php-cs-fixer-tests
 
   - *run-phpstan-tests
