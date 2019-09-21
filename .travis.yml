@@ -1,0 +1,75 @@
+env:
+  global:
+    #- CC_TEST_REPORTER_ID=721e19591944a2b03d54b18bac024cb12cf060e5367f538d729ba32fb3fc519e
+
+    - TEST_COVERAGE=true
+
+    - RUN_SONAR_SCANNER=1
+
+language: php
+
+
+php:
+  - 7.2
+
+
+cache:
+  directories:
+  - $HOME/.composer/cache
+
+.steps:
+  #
+  #   COMMON CI STEP
+  #
+  - &add-composer-bin-dir-to-path |
+      export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+  - &clear-test-app-cache |
+      tests/Fixtures/app/console cache:clear
+
+  - &disable-php-memory-limit |
+      echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+  - &disable-xdebug-php-extension |
+      phpenv config-rm xdebug.ini || echo "xdebug not available"
+
+  - &enable-mongodb-php-extension |
+      echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/mongodb.ini
+
+  - &run-behat-tests |
+      vendor/bin/behat --format=progress --no-interaction --colors
+
+  - &run-phpunit-tests |
+      bin/phpunit --colors=always --coverage-clover clover.xml --log-junit junit.xml
+
+  - &run-php-cs-fixer-tests |
+      vendor/bin/php-cs-fixer fix --dry-run --diff
+
+  - &run-phpstan-tests |
+      vendor/bin/phpstan analyse
+
+  - &update-project-dependencies |
+      composer update --no-progress --no-suggest --ansi
+
+install:
+  - composer install
+  - ./bin/phpunit install
+
+
+script:
+
+  - php vendor/bin/php-cs-fixer fix --dry-run -vvv
+
+  - php vendor/bin/phpstan analyse src
+
+  - php bin/phpunit --coverage-clover clover.xml --log-junit junit.xml
+
+  #- ./cc-test-reporter after-build --coverage-input-type clover --id $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT
+
+  - *run-behat-tests
+
+  - *run-phpunit-tests
+
+  - *run-php-cs-fixer-tests
+
+  - *run-phpstan-tests
