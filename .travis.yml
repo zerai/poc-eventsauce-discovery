@@ -25,16 +25,13 @@ cache:
       export PATH="$PATH:$HOME/.composer/vendor/bin"
 
   - &clear-test-app-cache |
-      tests/Fixtures/app/console cache:clear
+      bin/console cache:clear
 
   - &disable-php-memory-limit |
       echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
   - &disable-xdebug-php-extension |
       phpenv config-rm xdebug.ini || echo "xdebug not available"
-
-  - &enable-mongodb-php-extension |
-      echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/mongodb.ini
 
   - &run-behat-tests |
       vendor/bin/behat --format=progress --no-interaction --colors
@@ -57,19 +54,14 @@ install:
 
 
 script:
+  - *clear-test-app-cache
+  
+  - *run-php-cs-fixer-tests
 
-  - php vendor/bin/php-cs-fixer fix --dry-run -vvv
-
-  - php vendor/bin/phpstan analyse src
-
-  - php bin/phpunit --coverage-clover clover.xml --log-junit junit.xml
-
-  #- ./cc-test-reporter after-build --coverage-input-type clover --id $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT
+  - *run-phpstan-tests
 
   - *run-behat-tests
 
   - *run-phpunit-tests
 
-  - *run-php-cs-fixer-tests
-
-  - *run-phpstan-tests
+  #- ./cc-test-reporter after-build --coverage-input-type clover --id $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT

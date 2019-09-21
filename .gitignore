@@ -1,6 +1,8 @@
 ###> zerai/develop ###
 /.idea/
 /extra/
+clover.xml
+junit.xml
 ###< zerai/develop ###
 
 

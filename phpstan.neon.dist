@@ -1,0 +1,24 @@
+includes:
+    #- vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+
+    level: 7
+
+    paths:
+        - src
+        #- tests
+
+    ignoreErrors:
+        #- '##'
+
+
+    excludes_analyse:
+        - 'src/Kernel.php'
+        - '*/vendor/*'
+        - '*/extra/*'
+
+        # REMOVE dopo installazione di phpstan/phpunit
+        #- 'path_to_file.php'
+        
