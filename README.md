@@ -23,7 +23,7 @@ Dev Note:
 
 - [ ] - Bring in Eventsauce
 
-- [ ] - Bring in CompostDDD (messaging)
+- [x] - Bring in CompostDDD (messaging)
 
 - [ ] - Bring in ServiceBus with abstraction (Tactician, Messenger, or EventSauce built-in serviceBus ?)
 
