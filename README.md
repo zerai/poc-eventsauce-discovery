@@ -21,11 +21,13 @@ Dev Note:
 
 - [x] - Create CI pipeline (define common steps)
 
-- [ ] - Bring in Eventsauce
+- [x] - Bring in Eventsauce
 
 - [x] - Bring in CompostDDD (messaging)
 
 - [ ] - Bring in ServiceBus with abstraction (Tactician, Messenger, or EventSauce built-in serviceBus ?)
+
+- [ ] - Setup a docker dev enviroment
 
 
 ##  Branch based task
