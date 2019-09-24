@@ -1,3 +1,5 @@
+sudo: required
+
 env:
   global:
     #- CC_TEST_REPORTER_ID=721e19591944a2b03d54b18bac024cb12cf060e5367f538d729ba32fb3fc519e
@@ -8,9 +10,35 @@ env:
 
 language: php
 
+services:
+    - docker
+#    - mysql
 
-php:
-  - 7.2
+
+#addons:
+#  apt:
+#    sources:
+#      - mysql-5.7-trusty
+#    packages:
+#      - mysql-server
+#php:
+#  - 7.2
+#  - mysql 5.7
+matrix:
+    fast_finish: true
+    include:
+        #
+        # Define versions of MySQL and MariaDB to test against.
+        #
+        # mysql 5.5
+        - php: 7.2
+          #env: DB=mysql:5.7
+        - php: 7.3
+          #env: DB=mysql:5.7
+#        - php: 7.1
+#          env: DB=mysql:5.5
+#        - php: 7.2
+#          env: DB=mysql:5.5
 
 
 cache:
@@ -51,10 +79,21 @@ cache:
   - &update-project-dependencies |
       composer update --no-progress --no-suggest --ansi
 
+before_install:
+  - cp ci/.env.test.travis .env.test
+
 install:
+  - docker-compose -f tests/docker-compose.yml up -d
   - composer install
   - ./bin/phpunit install
 
+
+before_script:
+  - php bin/console doctrine:database:create --if-not-exists -e test
+  - php bin/console doctrine:migrations:migrate --no-interaction -e test
+  - php bin/console doctrine:schema:update --force -e test
+
+  #- php bin/console eventsauce:create-schema  --force -e test
 
 script:
   - *clear-test-app-cache

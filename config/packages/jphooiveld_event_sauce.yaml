@@ -1,0 +1,23 @@
+jphooiveld_event_sauce:
+    time_of_recording:
+        # The timezone to use for recorded messages, defaults to PHP ini setting.
+        timezone: UTC
+    messenger:
+        # Use symfony messenger instead of EventSauce's default dispatcher (needs package symfony/messenger installed).
+        enabled: false
+        # The name of the messenger command bus service to use.
+        service_bus: messenger.bus.events
+    message_repository:
+        # Override if you don't want to use the default doctrine message repository but your own implementation.
+        # If doctrine is enabled this will be ignored.
+        service: jphooiveld_eventsauce.message_repository.doctrine
+        doctrine:
+            # Use doctrine as default message repository. If you turn this off you must provide your own service.
+            enabled: true
+            # Service that implements a doctrine connection. We assume doctrine bundle default here.
+            connection: doctrine.dbal.default_connection
+            # The table name in the database to store the messages.
+            table: event
+        # Autoconfigure aggregate roots to use the default repository implemtations as created by the bundle.
+        # Turn this off if you want to create your own implementation.
+        autoconfigure_aggregates: true

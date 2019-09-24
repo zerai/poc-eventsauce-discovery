@@ -19,6 +19,9 @@
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="todo app">
+            <directory>todo-app/tests</directory>
+        </testsuite>
         <testsuite name="Lib CompostDDD Messaging Suite">
             <directory>lib/CompostDDD/messaging/tests</directory>
         </testsuite>

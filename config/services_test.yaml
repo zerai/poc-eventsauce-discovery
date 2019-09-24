@@ -5,3 +5,8 @@ services:
 
     App\Tests\Behat\:
         resource: '../tests/Behat/*'
+
+#    TodoApp\Infrastructure\EventSauce\UserRepository:
+#        tags:
+#            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\User\User' }
+#        public: true

@@ -1,0 +1,23 @@
+version: "2"
+services:
+    rabbit:
+        image: rabbitmq:3.6-management-alpine
+        hostname: rabbit
+        environment:
+            RABBITMQ_ERLANG_COOKIE: "012794e09e71uoihadsc"
+            RABBITMQ_DEFAULT_USER: "guest"
+            RABBITMQ_DEFAULT_PASS: "guest"
+            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+
+    mysql:
+        image: mysql:5.7.21
+        environment:
+            MYSQL_DATABASE: poc
+            MYSQL_PASSWORD: poc_password
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_USER: poc_user
+        ports:
+            - '3333:3306'

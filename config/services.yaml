@@ -10,6 +10,11 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            EventSauce\EventSourcing\AggregateRootRepository $userRepository: '@jphooiveld_eventsauce.aggregate_repository.user_repository'
+            EventSauce\EventSourcing\AggregateRootRepository $todoRepository: '@jphooiveld_eventsauce.aggregate_repository.todo_repository'
+
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -25,3 +30,39 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+
+#    TodoApp\Infrastructure\EventSauce\EventSauceNewsletterSubscriptionRepository:
+#        tags: # ['eventsauce.aggregate_repository', ]
+#            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\Acme\NewsletterSubscription' }
+
+
+    #TodoApp\Infrastructure\Projection\NewsletterSubscriptionProjection:
+        #public: true
+
+    TodoApp\Infrastructure\EventSauce\Decorator\YourDecorator:
+        public: true
+
+    TodoApp\Infrastructure\EventSauce\Decorator\EventAliasDecorator:
+        #public: true
+
+    TodoApp\Infrastructure\EventSauce\ClassNameInflector\EventNameMapInflector:
+
+
+
+
+    TodoApp\Infrastructure\EventSauce\UserRepository:
+        #tags: ['eventsauce.aggregate_repository']
+        tags:
+            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\User\User' }
+
+    TodoApp\Infrastructure\Projection\UserProjection:
+        public: true
+
+    TodoApp\Infrastructure\EventSauce\TodoRepository:
+        tags:
+            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\Todo\Todo' }
+
+    TodoApp\Infrastructure\Projection\TodoProjection:
+        public: true

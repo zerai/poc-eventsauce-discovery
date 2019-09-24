@@ -1,6 +1,6 @@
 includes:
     #- vendor/phpstan/phpstan-strict-rules/rules.neon
-    - vendor/phpstan/phpstan-phpunit/extension.neon
+    #- vendor/phpstan/phpstan-phpunit/extension.neon
 
 parameters:
 
@@ -8,17 +8,21 @@ parameters:
 
     paths:
         - src
+        - todo-app/src
         #- tests
 
     ignoreErrors:
         #- '##'
+        - '#Method TodoApp\\Infrastructure\\EventSauce\\ClassNameInflector\\EventNameMapInflector::typeToClassName() should return string but returns int|string.#'
 
 
     excludes_analyse:
         - 'src/Kernel.php'
+        - 'src/Migrations'
         - '*/vendor/*'
         - '*/extra/*'
 
         # REMOVE dopo installazione di phpstan/phpunit
         #- 'path_to_file.php'
+        #- Command/WireUserAddCommand.php
         
