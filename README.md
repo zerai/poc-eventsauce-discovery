@@ -27,7 +27,7 @@ Dev Note:
 
 - [ ] - Bring in ServiceBus with abstraction (Tactician, Messenger, or EventSauce built-in serviceBus ?)
 
-- [ ] - Setup a docker dev enviroment
+- [x] - Setup a docker dev enviroment
 
 
 ##  Branch based task
@@ -35,7 +35,7 @@ Dev Note:
 
 ### TodoApplication
 
-- [ ] - Create new branch and psr namespace
+- [x] - Create new branch and psr namespace
 
 - [ ] - Build a basic user model
       
