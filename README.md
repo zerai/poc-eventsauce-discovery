@@ -40,3 +40,5 @@ Dev Note:
 - [ ] - Build a basic user model
       
 - [ ] - Build a basic task model
+
+- [ ] - HowTo Projection? extract code for reuse, maybe separate lib or bundle
