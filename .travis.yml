@@ -6,39 +6,25 @@ env:
 
     - TEST_COVERAGE=true
 
-    - RUN_SONAR_SCANNER=1
+    - RUN_SONAR_SCANNER=0
 
 language: php
 
 services:
     - docker
-#    - mysql
 
+addons:
+  sonarcloud:
+    organization: "zerai"
+    token:
+      secure: "0adda6e05d106da8c368334ad26c964892f17e4e" # encrypted value of your token
 
-#addons:
-#  apt:
-#    sources:
-#      - mysql-5.7-trusty
-#    packages:
-#      - mysql-server
-#php:
-#  - 7.2
-#  - mysql 5.7
 matrix:
     fast_finish: true
     include:
-        #
-        # Define versions of MySQL and MariaDB to test against.
-        #
-        # mysql 5.5
         - php: 7.2
-          #env: DB=mysql:5.7
+          env: RUN_SONAR_SCANNER=1
         - php: 7.3
-          #env: DB=mysql:5.7
-#        - php: 7.1
-#          env: DB=mysql:5.5
-#        - php: 7.2
-#          env: DB=mysql:5.5
 
 
 cache:
@@ -105,5 +91,9 @@ script:
   - *run-behat-tests
 
   - *run-phpunit-tests
+
+
+after_success:
+  - if [[ $RUN_SONAR_SCANNER == "1" ]]; then sonar-scanner -Dproject.settings=sonar-project.properties -Dsonar.projectVersion=$TRAVIS_TAG; fi
 
   #- ./cc-test-reporter after-build --coverage-input-type clover --id $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT

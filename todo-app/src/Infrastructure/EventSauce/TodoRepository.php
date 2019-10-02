@@ -28,9 +28,6 @@ class TodoRepository implements TodoRepositoryPort
 
     public function ofId(TodoId $todoId): Todo
     {
-        /** @var Todo $todo */
-        $todo = $this->aggregateRootRepository->retrieve($todoId);
-
-        return $todo;
+        return $this->aggregateRootRepository->retrieve($todoId);
     }
 }

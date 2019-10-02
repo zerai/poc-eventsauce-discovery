@@ -32,18 +32,15 @@ class EventNameMapInflector implements ClassNameInflector
         }
 
         // check event in map
-        //if (!array_key_exists($className, EventNameClassMap::MAP)) {
         if (!array_key_exists($className, $this->map->supportTypes())) {
             throw new \UnexpectedValueException('Class name '.$className.' is not mapped to any event.');
         }
 
-        //return EventNameClassMap::MAP[$className];
         return $this->map->supportTypes()[$className];
     }
 
     public function typeToClassName(string $eventName): string
     {
-        //if (!$className = array_search($eventName, EventNameClassMap::MAP)) {
         if (!$className = array_search($eventName, $this->map->supportTypes())) {
             throw new \UnexpectedValueException('Message type '.$eventName.' is not mapped to any class.');
         }

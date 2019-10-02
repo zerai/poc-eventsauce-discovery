@@ -25,11 +25,6 @@ class WireTodoAddCommand extends Command
         parent::__construct('wire:todo:add');
     }
 
-    protected function configure(): void
-    {
-        parent::configure();
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $todoId = TodoId::generate();

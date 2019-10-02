@@ -23,11 +23,6 @@ class WireUserAddCommand extends Command
         parent::__construct('wire:user:add');
     }
 
-    protected function configure(): void
-    {
-        parent::configure();
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $userId = UserId::create();

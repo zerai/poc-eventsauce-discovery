@@ -28,9 +28,6 @@ class UserRepository implements UserRepositoryPort
 
     public function ofId(UserId $userId): User
     {
-        /** @var User $user */
-        $user = $this->aggregateRootRepository->retrieve($userId);
-
-        return $user;
+        return $this->aggregateRootRepository->retrieve($userId);
     }
 }

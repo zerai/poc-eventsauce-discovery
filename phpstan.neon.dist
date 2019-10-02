@@ -13,7 +13,9 @@ parameters:
 
     ignoreErrors:
         #- '##'
-        - '#Method TodoApp\\Infrastructure\\EventSauce\\ClassNameInflector\\EventNameMapInflector::typeToClassName() should return string but returns int|string.#'
+        - '#Method TodoApp\\Infrastructure\\EventSauce\\ClassNameInflector\\EventNameMapInflector::typeToClassName\(\) should return string but returns int|string.#'
+        - '#Method TodoApp\\Infrastructure\\EventSauce\\TodoRepository::ofId\(\) should return TodoApp\\Domain\\Model\\Todo\\Todo but returns object.#'
+        - '#Method TodoApp\\Infrastructure\\EventSauce\\UserRepository::ofId\(\) should return TodoApp\\Domain\\Model\\User\\User but returns object.#'
 
 
     excludes_analyse:
@@ -25,4 +27,7 @@ parameters:
         # REMOVE dopo installazione di phpstan/phpunit
         #- 'path_to_file.php'
         #- Command/WireUserAddCommand.php
+
+
+
         

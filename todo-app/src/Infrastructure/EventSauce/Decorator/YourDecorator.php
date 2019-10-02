@@ -11,7 +11,6 @@ class YourDecorator implements MessageDecorator
 {
     public function decorate(Message $message): Message
     {
-        // TODO: Implement decorate() method.
         return $message->withHeader('x-decorated-by', 'Frank de Jonge');
     }
 }
