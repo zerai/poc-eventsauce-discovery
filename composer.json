@@ -40,14 +40,16 @@
         "psr-4": {
             "App\\": "src/",
             "TodoApp\\": "todo-app/src/",
-            "CompostDDD\\Messaging\\": "lib/CompostDDD/messaging/src"
+            "CompostDDD\\Messaging\\": "lib/CompostDDD/messaging/src",
+            "EventSauceTools\\": "lib/EventSauceTools/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/",
             "TodoApp\\Tests\\": "todo-app/tests/",
-            "CompostDDD\\Tests\\Messaging\\": "lib/CompostDDD/messaging/tests"
+            "CompostDDD\\Tests\\Messaging\\": "lib/CompostDDD/messaging/tests",
+            "EventSauceTools\\Tests\\": "lib/EventSauceTools/tests"
         }
     },
     "replace": {
