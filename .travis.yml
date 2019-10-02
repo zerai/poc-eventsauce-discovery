@@ -17,7 +17,7 @@ addons:
   sonarcloud:
     organization: "zerai"
     token:
-      secure: "0adda6e05d106da8c368334ad26c964892f17e4e" # encrypted value of your token
+      secure: "91dcc02a092dd75b62a3f8558e4db332f5d632ff"
 
 matrix:
     fast_finish: true

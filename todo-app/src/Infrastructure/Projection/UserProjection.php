@@ -33,13 +33,10 @@ class UserProjection extends AbstractProjection implements UserProjectionPort, C
         if ($this->isProjectabile($message)) {
             $this->project($message);
         }
-
-        //var_dump($message);
     }
 
     public function isProjectabile(Message $message): bool
     {
-        //if (!array_search(get_class($message->event()), $this::PROJECTABLE_EVENTS)) {
         if (!in_array(get_class($message->event()), $this::PROJECTABLE_EVENTS)) {
             return false;
         }
@@ -75,24 +72,23 @@ class UserProjection extends AbstractProjection implements UserProjectionPort, C
         $this->update($data, $identifier);
     }
 
-//
-//    public function isInitialized(): bool
-//    {
-//        $tableName = $this::TABLE_NAME;
-//
-//        $sql = "SHOW TABLES LIKE '$tableName';";
-//
-//        $statement = $this->connection->prepare($sql);
-//        $statement->execute();
-//
-//        $result = $statement->fetch();
-//
-//        if (false === $result) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
+    public function isInitialized(): bool
+    {
+        $tableName = $this::TABLE_NAME;
+
+        $sql = "SHOW TABLES LIKE '$tableName';";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+
+        $result = $statement->fetch();
+
+        if (false === $result) {
+            return false;
+        }
+
+        return true;
+    }
 
     public function reset(): void
     {

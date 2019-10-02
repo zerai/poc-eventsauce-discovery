@@ -27,9 +27,7 @@ class User implements AggregateRoot
         string $userName,
         string $email
     ): User {
-        //Todo needed
         $user = new self($userId);
-
         $user->recordThat(UserWasRegistered::fromPayload([
             'user_id' => $userId->toString(),
             'user_name' => $userName,
@@ -80,8 +78,6 @@ class User implements AggregateRoot
 
     private function applyUserNameWasChanged(UserNameWasChanged $event): void
     {
-        //$this->id= $event->userId();
         $this->userName = $event->userName();
-        //$this->email = $event->email();
     }
 }

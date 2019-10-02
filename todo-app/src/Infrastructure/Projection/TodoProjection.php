@@ -49,24 +49,23 @@ class TodoProjection extends AbstractProjection implements TodoProjectionPort, C
         $this->insert($data);
     }
 
-//
-//    public function isInitialized(): bool
-//    {
-//        $tableName = $this::TABLE_NAME;
-//
-//        $sql = "SHOW TABLES LIKE '$tableName';";
-//
-//        $statement = $this->connection->prepare($sql);
-//        $statement->execute();
-//
-//        $result = $statement->fetch();
-//
-//        if (false === $result) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
+    public function isInitialized(): bool
+    {
+        $tableName = $this::TABLE_NAME;
+
+        $sql = "SHOW TABLES LIKE '$tableName';";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+
+        $result = $statement->fetch();
+
+        if (false === $result) {
+            return false;
+        }
+
+        return true;
+    }
 
     public function reset(): void
     {
