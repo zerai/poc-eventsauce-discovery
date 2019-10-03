@@ -10,15 +10,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TodoApp\Domain\Model\Todo\Todo;
 use TodoApp\Domain\Model\Todo\TodoId;
+use TodoApp\Domain\Model\Todo\TodoRepository;
 use TodoApp\Domain\Model\Todo\TodoStatus;
 use TodoApp\Domain\Model\User\UserId;
 
 class WireTodoAddCommand extends Command
 {
-    /** @var AggregateRootRepository */
+    /** @var TodoRepository */
     private $todoRepository;
 
-    public function __construct(AggregateRootRepository $todoRepository)
+    public function __construct(TodoRepository $todoRepository)
     {
         $this->todoRepository = $todoRepository;
         $this->setDescription('Wire add todo');
@@ -33,6 +34,6 @@ class WireTodoAddCommand extends Command
 
         $todo = Todo::post($todoId, 'my todo text', $assigneeId, TodoStatus::fromName('OPEN'));
 
-        $this->todoRepository->persist($todo);
+        $this->todoRepository->store($todo);
     }
 }

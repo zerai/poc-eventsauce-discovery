@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\Todo\Exception;
 
 use TodoApp\Domain\Model\Todo\Todo;
+use TodoApp\Domain\Model\Todo\TodoId;
 use TodoApp\Domain\Model\Todo\TodoStatus;
 
 final class TodoNotOpen extends \RuntimeException
 {
-    public static function triedStatus(TodoStatus $status, Todo $todo): TodoNotOpen
+    public static function triedStatus(TodoStatus $status, TodoId $todoId): TodoNotOpen
     {
         return new self(\sprintf(
             'Tried to change status of Todo %s to %s. But Todo is not marked as open!',
-            $todo->id()->toString(),
+            $todoId->toString(),
             $status->toString()
         ));
     }

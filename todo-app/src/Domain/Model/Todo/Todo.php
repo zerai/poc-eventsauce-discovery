@@ -46,7 +46,7 @@ class Todo implements AggregateRoot
         $newStatus = TodoStatus::DONE();
 
         if (!$this->status->equals(TodoStatus::OPEN())) {
-            throw Exception\TodoNotOpen::triedStatus($newStatus, $this);
+            throw Exception\TodoNotOpen::triedStatus($newStatus, $this->id());
         }
         $this->recordThat(
             new TodoWasMarkedAsDone($this->id(), $newStatus, $this->assignee())

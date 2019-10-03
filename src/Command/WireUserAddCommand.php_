@@ -10,13 +10,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TodoApp\Domain\Model\User\User;
 use TodoApp\Domain\Model\User\UserId;
+use TodoApp\Domain\Model\User\UserRepository;
 
 class WireUserAddCommand extends Command
 {
-    /** @var AggregateRootRepository */
+    /** @var UserRepository */
     private $userRepository;
 
-    public function __construct(AggregateRootRepository $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
         $this->setDescription('Wire add user');
@@ -29,6 +30,6 @@ class WireUserAddCommand extends Command
 
         $user = User::register($userId, 'j. doe', 'me@jdoe.come');
 
-        $this->userRepository->persist($user);
+        $this->userRepository->store($user);
     }
 }

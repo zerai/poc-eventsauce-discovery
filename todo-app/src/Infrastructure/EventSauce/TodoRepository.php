@@ -14,20 +14,20 @@ class TodoRepository implements TodoRepositoryPort
     /**
      * @var AggregateRootRepository
      */
-    private $aggregateRootRepository;
+    private $todoAggregateRootRepository;
 
-    public function __construct(AggregateRootRepository $aggregateRootRepository)
+    public function __construct(AggregateRootRepository $todoAggregateRootRepository)
     {
-        $this->aggregateRootRepository = $aggregateRootRepository;
+        $this->todoAggregateRootRepository = $todoAggregateRootRepository;
     }
 
     public function store(Todo $todo): void
     {
-        $this->aggregateRootRepository->persist($todo);
+        $this->todoAggregateRootRepository->persist($todo);
     }
 
     public function ofId(TodoId $todoId): Todo
     {
-        return $this->aggregateRootRepository->retrieve($todoId);
+        return $this->todoAggregateRootRepository->retrieve($todoId);
     }
 }

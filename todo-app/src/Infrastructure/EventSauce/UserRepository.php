@@ -14,20 +14,20 @@ class UserRepository implements UserRepositoryPort
     /**
      * @var AggregateRootRepository
      */
-    private $aggregateRootRepository;
+    private $userAggregateRepository;
 
-    public function __construct(AggregateRootRepository $aggregateRootRepository)
+    public function __construct(AggregateRootRepository $userAggregateRepository)
     {
-        $this->aggregateRootRepository = $aggregateRootRepository;
+        $this->userAggregateRepository = $userAggregateRepository;
     }
 
     public function store(User $user): void
     {
-        $this->aggregateRootRepository->persist($user);
+        $this->userAggregateRepository->persist($user);
     }
 
     public function ofId(UserId $userId): User
     {
-        return $this->aggregateRootRepository->retrieve($userId);
+        return $this->userAggregateRepository->retrieve($userId);
     }
 }

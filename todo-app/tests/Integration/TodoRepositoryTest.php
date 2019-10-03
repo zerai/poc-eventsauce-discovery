@@ -23,7 +23,10 @@ class TodoRepositoryTest extends KernelTestCase
         $this->todoRepository = self::$container->get('jphooiveld_eventsauce.aggregate_repository.todo_repository');
     }
 
-    /** @test */
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
     public function it_can_persist_a_todo(): void
     {
         //self::markTestSkipped();

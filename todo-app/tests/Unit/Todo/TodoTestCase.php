@@ -50,8 +50,12 @@ abstract class TodoTestCase extends AggregateRootTestCase
 
         if ('markAsDone' === $methodName) {
             $todo = $this->repository->retrieve($this->aggregateRootId());
-            call_user_func_array([$todo, $methodName], $arguments);
-            $this->repository->persist($todo);
+            try {
+                call_user_func([$todo, $methodName]); //call_user_func_array([$todo, $methodName], $arguments);
+                //call_user_func_array([$todo, $methodName], $arguments);
+            } finally {
+                $this->repository->persist($todo);
+            }
         }
 
 //        //else {

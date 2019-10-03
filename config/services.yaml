@@ -11,8 +11,8 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            EventSauce\EventSourcing\AggregateRootRepository $userRepository: '@jphooiveld_eventsauce.aggregate_repository.user_repository'
-            EventSauce\EventSourcing\AggregateRootRepository $todoRepository: '@jphooiveld_eventsauce.aggregate_repository.todo_repository'
+            EventSauce\EventSourcing\AggregateRootRepository $userAggregateRepository: '@jphooiveld_eventsauce.aggregate_repository.user_repository'
+            EventSauce\EventSourcing\AggregateRootRepository $todoAggregateRootRepository: '@jphooiveld_eventsauce.aggregate_repository.todo_repository'
 
 
 
@@ -56,6 +56,7 @@ services:
         #tags: ['eventsauce.aggregate_repository']
         tags:
             - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\User\User' }
+        public: true
 
     TodoApp\Infrastructure\Projection\UserProjection:
         public: true
@@ -63,6 +64,7 @@ services:
     TodoApp\Infrastructure\EventSauce\TodoRepository:
         tags:
             - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\Todo\Todo' }
+        public: true
 
     TodoApp\Infrastructure\Projection\TodoProjection:
         public: true

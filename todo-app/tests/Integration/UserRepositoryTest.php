@@ -21,7 +21,10 @@ class UserRepositoryTest extends KernelTestCase
         $this->userRepository = self::$container->get('jphooiveld_eventsauce.aggregate_repository.user_repository');
     }
 
-    /** @test */
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
     public function it_can_persist_a_user(): void
     {
         //self::markTestSkipped();
