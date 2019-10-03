@@ -7,6 +7,7 @@ namespace TodoApp\Infrastructure\Projection;
 use Doctrine\DBAL\Connection;
 use EventSauce\EventSourcing\Consumer;
 use EventSauce\EventSourcing\Message;
+use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
 use TodoApp\Domain\Model\Todo\Projection\TodoProjection as TodoProjectionPort;
 use TodoApp\Infrastructure\Projection\Common\AbstractProjection;
@@ -47,6 +48,15 @@ class TodoProjection extends AbstractProjection implements TodoProjectionPort, C
     {
         $data = $event->toPayload();
         $this->insert($data);
+    }
+
+    public function projectWhenTodoWasMarkedAsDone(TodoWasMarkedAsDone $event): void
+    {
+        $identifier = ['todo_id' => $event->todoId()->toString()];
+
+        $data = ['status' => $event->newStatus()->toString()];
+
+        $this->update($data, $identifier);
     }
 
     public function isInitialized(): bool
