@@ -25,7 +25,7 @@ class WireUserAddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $userId = UserId::create();
+        $userId = UserId::generate();
 
         $user = User::register($userId, 'j. doe', 'me@jdoe.come');
 

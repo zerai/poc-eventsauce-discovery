@@ -29,7 +29,7 @@ class WireTodoAddCommand extends Command
     {
         $todoId = TodoId::generate();
 
-        $assigneeId = UserId::create();
+        $assigneeId = UserId::generate();
 
         $todo = Todo::post($todoId, 'my todo text', $assigneeId, TodoStatus::fromName('OPEN'));
 
