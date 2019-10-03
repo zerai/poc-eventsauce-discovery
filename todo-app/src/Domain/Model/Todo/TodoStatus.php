@@ -7,14 +7,14 @@ namespace TodoApp\Domain\Model\Todo;
 final class TodoStatus
 {
     public const OPTIONS = [
-        'OPEN' => 0,
-        'DONE' => 1,
-        'EXPIRED' => 2,
+        'OPEN' => 'OPEN',
+        'DONE' => 'DONE',
+        'EXPIRED' => 'EXPIRED',
     ];
 
-    public const OPEN = 0;
-    public const DONE = 1;
-    public const EXPIRED = 2;
+    public const OPEN = 'OPEN';
+    public const DONE = 'DONE';
+    public const EXPIRED = 'EXPIRED';
 
     private $name;
     private $value;
@@ -43,7 +43,7 @@ final class TodoStatus
     public static function fromName(string $value): self
     {
         if (!isset(self::OPTIONS[$value])) {
-            throw new \InvalidArgumentException('Unknown enum name given');
+            throw new \InvalidArgumentException('Unknown TodoStatus name given');
         }
 
         return self::{$value}();
@@ -57,7 +57,7 @@ final class TodoStatus
             }
         }
 
-        throw new \InvalidArgumentException('Unknown enum value given');
+        throw new \InvalidArgumentException('Unknown TodoStatus value given');
     }
 
     public function equals(TodoStatus $other): bool
