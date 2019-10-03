@@ -6,6 +6,7 @@ namespace TodoApp\Domain\Model\Todo;
 
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
+use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
 use TodoApp\Domain\Model\User\UserId;
 
@@ -38,6 +39,18 @@ class Todo implements AggregateRoot
         );
 
         return $self;
+    }
+
+    public function markAsDone(): void
+    {
+        $status = TodoStatus::DONE();
+
+        if (!$this->status->equals(TodoStatus::OPEN())) {
+            throw Exception\TodoNotOpen::triedStatus($status, $this);
+        }
+        $this->recordThat(
+            new TodoWasMarkedAsDone($this->id(), $status, $this->assignee())
+        );
     }
 
     /**
@@ -78,5 +91,13 @@ class Todo implements AggregateRoot
         $this->todoText = $event->todoText();
         $this->assignee = $event->assigneeId();
         $this->status = $event->status();
+    }
+
+    private function applyTodoWasMarkedAsDone(TodoWasMarkedAsDone $event): void
+    {
+//        $this->id = $event->todoId();
+//        $this->todoText = $event->todoText();
+//        $this->assignee = $event->assigneeId();
+        $this->status = $event->newStatus();
     }
 }
