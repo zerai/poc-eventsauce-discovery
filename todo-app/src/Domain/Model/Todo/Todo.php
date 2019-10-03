@@ -43,13 +43,13 @@ class Todo implements AggregateRoot
 
     public function markAsDone(): void
     {
-        $status = TodoStatus::DONE();
+        $newStatus = TodoStatus::DONE();
 
         if (!$this->status->equals(TodoStatus::OPEN())) {
-            throw Exception\TodoNotOpen::triedStatus($status, $this);
+            throw Exception\TodoNotOpen::triedStatus($newStatus, $this);
         }
         $this->recordThat(
-            new TodoWasMarkedAsDone($this->id(), $status, $this->assignee())
+            new TodoWasMarkedAsDone($this->id(), $newStatus, $this->assignee())
         );
     }
 
@@ -95,9 +95,6 @@ class Todo implements AggregateRoot
 
     private function applyTodoWasMarkedAsDone(TodoWasMarkedAsDone $event): void
     {
-//        $this->id = $event->todoId();
-//        $this->todoText = $event->todoText();
-//        $this->assignee = $event->assigneeId();
         $this->status = $event->newStatus();
     }
 }

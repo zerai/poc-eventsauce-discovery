@@ -51,7 +51,7 @@ cache:
       vendor/bin/behat --format=progress --no-interaction --colors
 
   - &run-phpunit-tests |
-      bin/phpunit --colors=always --coverage-clover clover.xml --log-junit junit.xml
+      bin/phpunit --colors=always --coverage-clover=coverage-report.clover --log-junit=test-report.xml
 
   - &run-php-cs-fixer-tests |
       vendor/bin/php-cs-fixer fix --dry-run --diff
