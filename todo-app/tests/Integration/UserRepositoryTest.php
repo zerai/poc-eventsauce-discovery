@@ -22,7 +22,7 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /** @test */
-    public function it_can_persist(): void
+    public function it_can_persist_a_user(): void
     {
         //self::markTestSkipped();
         $user = User::register(
@@ -35,7 +35,7 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /** @test */
-    public function it_can_retrive(): void
+    public function it_can_retrive_a_user(): void
     {
         /** @var User $user */
         $user = User::register(

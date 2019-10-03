@@ -6,6 +6,7 @@ namespace TodoApp\Tests\Unit\Todo;
 
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
+use TodoApp\Domain\Model\Todo\TodoId;
 use TodoApp\Domain\Model\Todo\TodoStatus;
 use TodoApp\Domain\Model\User\UserId;
 
@@ -30,8 +31,8 @@ class TodoTest extends TodoTestCase
     /** @test */
     public function mark_a_todo_as_done()
     {
-        self::markTestSkipped();
-        $todoId = $this->newAggregateRootId(); // aggregateRootId();
+        //self::markTestSkipped();
+        $todoId = TodoId::generate(); // $this->AggregateRootId(); // aggregateRootId();
         $assigeeId = UserId::generate();
         $newStatus = TodoStatus::DONE();
 

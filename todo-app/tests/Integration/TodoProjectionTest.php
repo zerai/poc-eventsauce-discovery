@@ -23,7 +23,10 @@ class TodoProjectionTest extends KernelTestCase
         $this->projection = self::$container->get('TodoApp\Infrastructure\Projection\TodoProjection');
     }
 
-    /** @test */
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
     public function it_project_event()
     {
         //self::markTestSkipped();

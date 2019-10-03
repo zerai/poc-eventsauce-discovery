@@ -46,12 +46,20 @@ abstract class TodoTestCase extends AggregateRootTestCase
             } finally {
                 $this->repository->persist($todo);
             }
-        } else {
-            $todo = $this->repository->retrieve($arguments[0]);
+        }
 
+        if ('markAsDone' === $methodName) {
+            $todo = $this->repository->retrieve($this->aggregateRootId());
             call_user_func_array([$todo, $methodName], $arguments);
             $this->repository->persist($todo);
         }
+
+//        //else {
+//            $todo = $this->repository->retrieve($arguments[0]);
+//
+//            call_user_func_array([$todo, $methodName], $arguments);
+//            $this->repository->persist($todo);
+//        //}
     }
 
     /**
@@ -70,5 +78,13 @@ abstract class TodoTestCase extends AggregateRootTestCase
         }
 
         return $this;
+    }
+
+    /**
+     * @return Todo
+     */
+    protected function retriveTodoByid(TodoId $todoId): Todo
+    {
+        return $this->repository->retrieve($todoId);
     }
 }

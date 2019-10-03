@@ -21,7 +21,10 @@ class UserProjectionTest extends KernelTestCase
         $this->projection = self::$container->get('TodoApp\Infrastructure\Projection\UserProjection');
     }
 
-    /** @test */
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
     public function it_project_event()
     {
         $event = UserWasRegistered::fromPayload([
