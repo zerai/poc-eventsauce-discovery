@@ -1,0 +1,113 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+  #eventsauce.message_repository.service: 'jphooiveld_eventsauce.message_repository.doctrine'
+
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: false      # Automatically injects dependencies in your services.
+        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
+        public: false
+
+
+    #
+    #   EVENTSAUCE DISPATHCHER
+    #
+    eventsauce.message_dispatcher.synchronous:
+        class: EventSauce\EventSourcing\SynchronousMessageDispatcher
+
+    eventsauce.message_dispatcher:
+        alias: 'eventsauce.message_dispatcher.synchronous'
+
+    #
+    #   EVENTSAUCE INFLECTOR
+    #
+    eventsauce.inflector.dot_separated_snake_case:
+        class: EventSauce\EventSourcing\DotSeparatedSnakeCaseInflector
+
+    eventsauce.inflector:
+        alias: 'eventsauce.inflector.dot_separated_snake_case'
+
+
+
+    #
+    #   EVENTSAUCE HEADERS
+    #
+    eventsauce.date_time_zone:
+        class: DateTimeZone
+        arguments:
+            - 'UTC'
+
+    eventsauce.clock.system:
+        class: EventSauce\EventSourcing\Time\SystemClock
+        arguments:
+            - '@eventsauce.date_time_zone'
+
+    eventsauce.clock:
+        alias: 'eventsauce.clock.system'
+
+    eventsauce.header.default:
+        class: EventSauce\EventSourcing\DefaultHeadersDecorator
+        arguments:
+            - '@eventsauce.inflector'
+            - '@eventsauce.clock'
+        tags:
+            - { name: 'eventsauce.message_decorator' }
+
+    eventsauce.message_decorator.chain:
+        class: EventSauce\EventSourcing\MessageDecoratorChain
+        public: false
+
+    eventsauce.message_decorator:
+        alias: 'eventsauce.message_decorator.chain'
+
+
+    #
+    #   EVENTSAUCE MESSAGE SERIALIZER
+    #
+    eventsauce.event_serializer.constructing:
+        class: EventSauce\EventSourcing\Serialization\ConstructingPayloadSerializer
+
+    eventsauce.event_serializer:
+        alias: eventsauce.event_serializer.constructing
+
+    eventsauce.message_serializer.constructing:
+        class: EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer
+        arguments:
+            - '@eventsauce.inflector'
+            - '@eventsauce.event_serializer'
+
+    eventsauce.message_serializer:
+        alias: eventsauce.message_serializer.constructing
+
+    #
+    #   EVENTSAUCE UPCASTER
+    #
+    eventsauce.upcaster.delegating:
+        class: EventSauce\EventSourcing\Upcasting\DelegatingUpcaster
+
+    eventsauce.upcaster:
+        alias: 'eventsauce.upcaster.delegating'
+
+    eventsauce.event_serializer.upcasting:
+        class: EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer
+        decorates: 'eventsauce.message_serializer'
+        arguments:
+            - '@eventsauce.event_serializer.upcasting.inner'
+            - '@eventsauce.upcaster'
+
+
+    #
+    #   EVENTSAUCE DOCTRINE MESSAGE REPOSITORY
+    #
+    eventsauce.message_repository.doctrine:
+        class: EventSauce\DoctrineMessageRepository\DoctrineMessageRepository
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '@eventsauce.message_serializer'
+            - 'event'  # <---- MYSQL TABLE NAME

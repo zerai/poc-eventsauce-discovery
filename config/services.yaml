@@ -1,3 +1,5 @@
+imports:
+    - { resource: eventsauce_services.yaml }
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -11,8 +13,8 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            EventSauce\EventSourcing\AggregateRootRepository $userAggregateRepository: '@jphooiveld_eventsauce.aggregate_repository.user_repository'
-            EventSauce\EventSourcing\AggregateRootRepository $todoAggregateRootRepository: '@jphooiveld_eventsauce.aggregate_repository.todo_repository'
+            EventSauce\EventSourcing\AggregateRootRepository $userAggregateRepository: '@eventsauce.aggregate_repository.user'
+            EventSauce\EventSourcing\AggregateRootRepository $todoAggregateRootRepository: '@eventsauce.aggregate_repository.todo'
 
 
 
@@ -32,38 +34,43 @@ services:
     # please note that last definitions always *replace* previous ones
 
 
-
-#    TodoApp\Infrastructure\EventSauce\EventSauceNewsletterSubscriptionRepository:
-#        tags: # ['eventsauce.aggregate_repository', ]
-#            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\Acme\NewsletterSubscription' }
-
-
-    #TodoApp\Infrastructure\Projection\NewsletterSubscriptionProjection:
-        #public: true
-
-    TodoApp\Infrastructure\EventSauce\Decorator\YourDecorator:
+    eventsauce.aggregate_repository.user:
+        class: EventSauce\EventSourcing\ConstructingAggregateRootRepository
+        arguments:
+            - 'TodoApp\Domain\Model\User\User'
+            - '@eventsauce.message_repository.doctrine'
+            - '@eventsauce.message_dispatcher'
+            - '@eventsauce.message_decorator'
         public: true
 
-    TodoApp\Infrastructure\EventSauce\Decorator\EventAliasDecorator:
-        #public: true
+    eventsauce.aggregate_repository.todo:
+        class: EventSauce\EventSourcing\ConstructingAggregateRootRepository
+        arguments:
+            - 'TodoApp\Domain\Model\Todo\Todo'
+            - '@eventsauce.message_repository.doctrine'
+            - '@eventsauce.message_dispatcher'
+            - '@eventsauce.message_decorator'
+        public: true
 
-    TodoApp\Infrastructure\EventSauce\ClassNameInflector\EventNameMapInflector:
 
-
-
-
+#    TodoApp\Infrastructure\EventSauce\Decorator\YourDecorator:
+#        public: true
+#
+#    TodoApp\Infrastructure\EventSauce\Decorator\EventAliasDecorator:
+#        #public: true
+#
+#    TodoApp\Infrastructure\EventSauce\ClassNameInflector\EventNameMapInflector:
+#
+#
+#
+#
     TodoApp\Infrastructure\EventSauce\UserRepository:
-        #tags: ['eventsauce.aggregate_repository']
-        tags:
-            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\User\User' }
         public: true
 
     TodoApp\Infrastructure\Projection\UserProjection:
         public: true
 
     TodoApp\Infrastructure\EventSauce\TodoRepository:
-        tags:
-            - { name: 'eventsauce.aggregate_repository', AggregateRootClass: 'TodoApp\Domain\Model\Todo\Todo' }
         public: true
 
     TodoApp\Infrastructure\Projection\TodoProjection:

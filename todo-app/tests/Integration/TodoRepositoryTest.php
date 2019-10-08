@@ -20,7 +20,7 @@ class TodoRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->todoRepository = self::$container->get('jphooiveld_eventsauce.aggregate_repository.todo_repository');
+        $this->todoRepository = self::$container->get('eventsauce.aggregate_repository.todo');
     }
 
     /**

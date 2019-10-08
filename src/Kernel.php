@@ -5,12 +5,14 @@ namespace App;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 use TodoApp\Infrastructure\EventSauce\ClassNameInflector\EventNameMapInflector;
 
-class Kernel extends BaseKernel
+class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
@@ -52,8 +54,61 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
     }
 
-    protected function build(ContainerBuilder $container)
+
+
+    public function process(ContainerBuilder $container)
     {
-        //$container->setAlias('jphooiveld_eventsauce.inflector', EventNameMapInflector::class);
+        $this->processConsumerCompilerPass($container);
+        $this->processDelegatableUpcasterCompilerPass($container);
+        $this->processMessageDecoratorCompilerPass($container);
+    }
+
+    protected function processConsumerCompilerPass(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition('eventsauce.message_dispatcher.synchronous')) {
+            return;
+        }
+
+        $definition = $container->getDefinition('eventsauce.message_dispatcher.synchronous');
+        $arguments  = [];
+
+        foreach ($container->findTaggedServiceIds('eventsauce.consumer') as $id => $tags) {
+            $arguments[] = new Reference($id);
+        }
+
+        $definition->setArguments($arguments);
+    }
+
+
+    protected function processDelegatableUpcasterCompilerPass(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition('eventsauce.upcaster.delegating')) {
+            return;
+        }
+
+        $definition = $container->getDefinition('eventsauce.upcaster.delegating');
+        $arguments  = [];
+
+        foreach ($container->findTaggedServiceIds('eventsauce.delegatable_upcaster') as $id => $tags) {
+            $arguments[] = new Reference($id);
+        }
+
+        $definition->setArguments($arguments);
+    }
+
+    protected function processMessageDecoratorCompilerPass(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition('eventsauce.message_decorator.chain')) {
+            return;
+        }
+
+        $definition = $container->getDefinition('eventsauce.message_decorator.chain');
+        $arguments  = [];
+
+        foreach ($container->findTaggedServiceIds('eventsauce.message_decorator') as $id => $tags) {
+            $arguments[] = new Reference($id);
+        }
+
+        $definition->setArguments($arguments);
     }
 }

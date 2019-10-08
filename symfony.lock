@@ -100,10 +100,10 @@
         "version": "v1.0.0"
     },
     "eventsauce/doctrine-message-repository": {
-        "version": "0.5.1"
+        "version": "0.7.0"
     },
     "eventsauce/eventsauce": {
-        "version": "0.5.1"
+        "version": "0.7.0"
     },
     "friends-of-behat/symfony-extension": {
         "version": "2.0",
@@ -137,9 +137,6 @@
     },
     "jean85/pretty-package-versions": {
         "version": "1.2"
-    },
-    "jphooiveld/eventsauce-bundle": {
-        "version": "v1.0.0"
     },
     "monolog/monolog": {
         "version": "1.25.1"

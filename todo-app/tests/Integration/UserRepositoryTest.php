@@ -18,7 +18,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->userRepository = self::$container->get('jphooiveld_eventsauce.aggregate_repository.user_repository');
+        $this->userRepository = self::$container->get('eventsauce.aggregate_repository.user');
     }
 
     /**
