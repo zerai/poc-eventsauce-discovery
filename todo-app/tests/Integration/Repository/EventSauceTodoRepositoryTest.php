@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TodoApp\Tests\Integration;
+namespace TodoApp\Tests\Integration\Repository;
 
 use EventSauce\EventSourcing\AggregateRootRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -11,7 +11,7 @@ use TodoApp\Domain\Model\Todo\TodoId;
 use TodoApp\Domain\Model\Todo\TodoStatus;
 use TodoApp\Domain\Model\User\UserId;
 
-class TodoRepositoryTest extends KernelTestCase
+class EventSauceTodoRepositoryTest extends KernelTestCase
 {
     /** @var AggregateRootRepository */
     private $todoRepository;

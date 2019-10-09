@@ -58,9 +58,6 @@ class UserProjection extends AbstractProjection implements UserProjectionPort, C
             ':user_name' => $event->username(),
             ':email' => $event->email(),
         ]);
-
-        //$data = $event->toPayload();
-        //$this->insert($data);
     }
 
     public function projectWhenUserNameWasChanged(UserNameWasChanged $event): void

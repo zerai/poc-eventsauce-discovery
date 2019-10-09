@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TodoApp\Tests\Integration;
+namespace TodoApp\Tests\Integration\Repository;
 
 use EventSauce\EventSourcing\AggregateRootRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

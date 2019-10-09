@@ -64,13 +64,13 @@ services:
 #
 #
 #
-    TodoApp\Infrastructure\EventSauce\UserRepository:
+    TodoApp\Infrastructure\EventSauce\UserRepository\UserRepository:
         public: true
 
     TodoApp\Infrastructure\Projection\UserProjection:
         public: true
 
-    TodoApp\Infrastructure\EventSauce\TodoRepository:
+    TodoApp\Infrastructure\EventSauce\TodoRepository\TodoRepository:
         public: true
 
     TodoApp\Infrastructure\Projection\TodoProjection:

@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\Todo;
 
 use EventSauce\EventSourcing\AggregateRoot;
-use EventSauce\EventSourcing\AggregateRootBehaviour;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
 use TodoApp\Domain\Model\User\UserId;
 
 class Todo implements AggregateRoot
 {
-    use AggregateRootBehaviour;
+    use TodoAggregateRootBehaviourWithRequiredHistory;
 
     /** @var TodoId */
     private $id;
@@ -26,7 +25,7 @@ class Todo implements AggregateRoot
     /** @var TodoStatus */
     private $status;
 
-    public static function post(TodoId $todoId, string $todoText, UserId $assigneeId, TodoStatus $status): Todo
+    public static function post(TodoId $todoId, string $todoText, UserId $assigneeId): Todo
     {
         $self = new self($todoId);
         $self->recordThat(
@@ -34,7 +33,7 @@ class Todo implements AggregateRoot
                 'todo_id' => $todoId->toString(),
                 'todo_text' => $todoText,
                 'user_id' => $assigneeId->toString(),
-                'status' => $status->toString(),
+                'status' => TodoStatus::OPEN()->toString(),
                 ])
         );
 

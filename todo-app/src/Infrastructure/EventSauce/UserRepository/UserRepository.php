@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TodoApp\Infrastructure\EventSauce;
+namespace TodoApp\Infrastructure\EventSauce\UserRepository;
 
 use EventSauce\EventSourcing\AggregateRootRepository;
 use TodoApp\Domain\Model\User\User;

@@ -43,7 +43,7 @@ final class TodoStatus
     public static function fromName(string $value): self
     {
         if (!isset(self::OPTIONS[$value])) {
-            throw new \InvalidArgumentException('Unknown TodoStatus name given');
+            throw new \InvalidArgumentException('Unknown enum name given');
         }
 
         return self::{$value}();
@@ -57,7 +57,7 @@ final class TodoStatus
             }
         }
 
-        throw new \InvalidArgumentException('Unknown TodoStatus value given');
+        throw new \InvalidArgumentException('Unknown enum value given');
     }
 
     public function equals(TodoStatus $other): bool

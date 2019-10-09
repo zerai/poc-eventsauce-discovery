@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TodoApp\Tests\Integration;
+namespace TodoApp\Tests\Integration\Projection;
 
 use EventSauce\EventSourcing\Message;
 use Ramsey\Uuid\Uuid;

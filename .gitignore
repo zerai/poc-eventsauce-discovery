@@ -3,8 +3,7 @@
 /extra/
 clover.xml
 junit.xml
-todo-app/src/Domain/Model/Acme
-todo-app/tests/Acme
+src/Command/EventSauce/
 ./docker-compose.yml
 ###< zerai/develop ###
 

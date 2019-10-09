@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TodoApp\Tests\Unit\Todo;
+namespace TodoApp\Tests\Unit\Event;
 
 use PHPUnit\Framework\TestCase;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
