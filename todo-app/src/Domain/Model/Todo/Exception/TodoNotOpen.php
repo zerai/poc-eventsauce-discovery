@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\Todo\Exception;
 
 use TodoApp\Domain\Model\Todo\Todo;
+use TodoApp\Domain\Model\Todo\TodoDeadline;
 use TodoApp\Domain\Model\Todo\TodoId;
 use TodoApp\Domain\Model\Todo\TodoStatus;
 
@@ -19,14 +20,15 @@ final class TodoNotOpen extends \RuntimeException
         ));
     }
 
-//    public static function triedToAddDeadline(TodoDeadline $deadline, TodoStatus $status): TodoNotOpen
-//    {
-//        return new self(\sprintf(
-//            'Tried to deadline %s to a todo with status %s.',
-//            $deadline->toString(),
-//            $status->toString()
-//        ));
-//    }
+    public static function triedToAddDeadline(TodoDeadline $deadline, TodoStatus $status): TodoNotOpen
+    {
+        return new self(\sprintf(
+            'Tried to deadline %s to a todo with status %s.',
+            $deadline->toString(),
+            $status->toString()
+        ));
+    }
+
 //
 //    public static function triedToAddReminder(TodoReminder $reminder, TodoStatus $status): TodoNotOpen
 //    {

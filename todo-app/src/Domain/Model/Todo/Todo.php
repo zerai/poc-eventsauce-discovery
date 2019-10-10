@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\Todo;
 
 use EventSauce\EventSourcing\AggregateRoot;
+use TodoApp\Domain\Model\Todo\Event\DeadlineWasAddedToTodo;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
 use TodoApp\Domain\Model\User\UserId;
@@ -20,10 +21,15 @@ class Todo implements AggregateRoot
     private $todoText;
 
     /** @var UserId */
-    private $assignee;
+    private $assigneeId;
 
     /** @var TodoStatus */
     private $status;
+
+    /**
+     * @var TodoDeadline|null
+     */
+    private $deadline;
 
     public static function post(TodoId $todoId, string $todoText, UserId $assigneeId): Todo
     {
@@ -40,7 +46,6 @@ class Todo implements AggregateRoot
         return $self;
     }
 
-
     /**
      * @throws Exception\TodoNotOpen
      */
@@ -52,9 +57,36 @@ class Todo implements AggregateRoot
             throw Exception\TodoNotOpen::triedStatus($newStatus, $this->id());
         }
         $this->recordThat(
-            new TodoWasMarkedAsDone($this->id(), $newStatus, $this->assignee())
+            new TodoWasMarkedAsDone($this->id(), $newStatus, $this->assigneeId())
         );
     }
+
+    public function addDeadline(UserId $userId, TodoDeadline $deadline): void
+    {
+        if (!$this->assigneeId()->equals($userId)) {
+            throw Exception\InvalidDeadline::userIsNotAssignee($userId, $this->assigneeId());
+        }
+        if ($deadline->isInThePast()) {
+            throw Exception\InvalidDeadline::deadlineInThePast($deadline);
+        }
+        if ($this->status->equals(TodoStatus::DONE())) {
+            throw Exception\TodoNotOpen::triedToAddDeadline($deadline, $this->status);
+        }
+        $this->recordThat(DeadlineWasAddedToTodo::byUserToDate($this->id, $this->assigneeId, $deadline));
+
+        // TODO decommentare analisi del perchè
+        if ($this->isMarkedAsExpired()) {
+            //$this->unmarkAsExpired();
+        }
+    }
+
+
+
+    private function isMarkedAsExpired(): bool
+    {
+        return $this->status->equals(TodoStatus::EXPIRED());
+    }
+
 
     /**
      * @return TodoId
@@ -75,9 +107,9 @@ class Todo implements AggregateRoot
     /**
      * @return UserId
      */
-    public function assignee(): UserId
+    public function assigneeId(): UserId
     {
-        return $this->assignee;
+        return $this->assigneeId;
     }
 
     /**
@@ -92,12 +124,17 @@ class Todo implements AggregateRoot
     {
         $this->id = $event->todoId();
         $this->todoText = $event->todoText();
-        $this->assignee = $event->assigneeId();
+        $this->assigneeId = $event->assigneeId();
         $this->status = $event->status();
     }
 
     private function applyTodoWasMarkedAsDone(TodoWasMarkedAsDone $event): void
     {
         $this->status = $event->newStatus();
+    }
+
+    private function applyDeadlineWasAddedToTodo(DeadlineWasAddedToTodo $event): void
+    {
+        $this->deadline = $event->deadline();
     }
 }

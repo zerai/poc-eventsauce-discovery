@@ -32,6 +32,8 @@ class MarkTodoAsDoneTest extends PostTodoTestCase
         )->then(
             new TodoWasMarkedAsDone($todoId, TodoStatus::DONE(), $assignee)
         );
+
+        self::assertEquals(TodoStatus::DONE(), $this->retrieveAggregateRoot($todoId)->status());
     }
 
     /** @test */

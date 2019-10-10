@@ -27,6 +27,9 @@ class PostTodoTest extends PostTodoTestCase
         )->then(
             new TodoWasPosted($todoId, 'irrelevant text', $assigeeId, TodoStatus::OPEN())
         );
+
+        self::assertEquals('irrelevant text', $this->retrieveAggregateRoot($todoId)->todoText());
+        self::assertEquals(TodoStatus::OPEN(), $this->retrieveAggregateRoot($todoId)->status());
     }
 
     /** @test */
