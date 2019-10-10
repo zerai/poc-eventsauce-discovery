@@ -79,7 +79,7 @@ final class TodoWasMarkedAsExpired implements SerializablePayload
             'todo_id' => $this->todoId->toString(),
             'old_status' => $this->oldStatus->toString(),
             'new_status' => $this->newStatus->toString(),
-            'assignee_d' => $this->assigneeId->toString(),
+            'assignee_id' => $this->assigneeId->toString(),
         ];
     }
 

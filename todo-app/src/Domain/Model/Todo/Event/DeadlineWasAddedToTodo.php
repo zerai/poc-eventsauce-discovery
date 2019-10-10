@@ -54,8 +54,8 @@ final class DeadlineWasAddedToTodo implements SerializablePayload
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new DeadlineWasAddedToTodo(
-            TodoId::fromString($payload['todoId']),
-            UserId::fromString($payload['userId']),
+            TodoId::fromString($payload['todo_id']),
+            UserId::fromString($payload['user_id']),
             TodoDeadline::fromString($payload['deadline'])
         );
     }
@@ -63,8 +63,8 @@ final class DeadlineWasAddedToTodo implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'todoId' => $this->todoId->toString(),
-            'userId' => $this->userId->toString(),
+            'todo_id' => $this->todoId->toString(),
+            'user_id' => $this->userId->toString(),
             'deadline' => $this->deadline->toString(),
         ];
     }
