@@ -7,6 +7,7 @@ namespace TodoApp\Domain\Model\Todo;
 use EventSauce\EventSourcing\AggregateRoot;
 use TodoApp\Domain\Model\Todo\Event\DeadlineWasAddedToTodo;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
+use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsExpired;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
 use TodoApp\Domain\Model\User\UserId;
 
@@ -80,13 +81,26 @@ class Todo implements AggregateRoot
         }
     }
 
-
+    /**
+     * @throws Exception\TodoNotExpired
+     * @throws Exception\TodoNotOpen
+     */
+    public function markAsExpired(): void
+    {
+        $status = TodoStatus::EXPIRED();
+        if (!$this->status->equals(TodoStatus::OPEN()) || $this->status->equals(TodoStatus::EXPIRED())) {
+            throw Exception\TodoNotOpen::triedToExpire($this->status);
+        }
+        if ($this->deadline->isMet()) {
+            throw Exception\TodoNotExpired::withDeadline($this->deadline, $this);
+        }
+        $this->recordThat(TodoWasMarkedAsExpired::fromStatus($this->id, $this->status, $status, $this->assigneeId));
+    }
 
     private function isMarkedAsExpired(): bool
     {
         return $this->status->equals(TodoStatus::EXPIRED());
     }
-
 
     /**
      * @return TodoId

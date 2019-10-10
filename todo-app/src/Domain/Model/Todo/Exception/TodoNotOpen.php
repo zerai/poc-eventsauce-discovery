@@ -48,8 +48,8 @@ final class TodoNotOpen extends \RuntimeException
 //        ));
 //    }
 //
-//    public static function triedToExpire(TodoStatus $status): TodoNotOpen
-//    {
-//        return new self(\sprintf('Tried to expire todo with status %s.', $status->toString()));
-//    }
+    public static function triedToExpire(TodoStatus $status): TodoNotOpen
+    {
+        return new self(\sprintf('Tried to expire todo with status %s.', $status->toString()));
+    }
 }
