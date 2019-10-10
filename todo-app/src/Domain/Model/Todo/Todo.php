@@ -40,6 +40,10 @@ class Todo implements AggregateRoot
         return $self;
     }
 
+
+    /**
+     * @throws Exception\TodoNotOpen
+     */
     public function markAsDone(): void
     {
         $newStatus = TodoStatus::DONE();
