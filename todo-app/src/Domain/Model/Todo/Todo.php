@@ -6,6 +6,7 @@ namespace TodoApp\Domain\Model\Todo;
 
 use EventSauce\EventSourcing\AggregateRoot;
 use TodoApp\Domain\Model\Todo\Event\DeadlineWasAddedToTodo;
+use TodoApp\Domain\Model\Todo\Event\ReminderWasAddedToTodo;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsExpired;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
@@ -28,10 +29,14 @@ class Todo implements AggregateRoot
     /** @var TodoStatus */
     private $status;
 
-    /**
-     * @var TodoDeadline|null
-     */
+    /** @var TodoDeadline|null */
     private $deadline;
+
+    /** @var TodoReminder */
+    private $reminder;
+
+    /** @var bool */
+    private $reminded = false;
 
     public static function post(TodoId $todoId, string $todoText, UserId $assigneeId): Todo
     {
@@ -112,6 +117,26 @@ class Todo implements AggregateRoot
         $this->recordThat(TodoWasUnmarkedAsExpired::fromStatus($this->id, $this->status, $status, $this->assigneeId));
     }
 
+    /**
+     * @param UserId       $userId
+     * @param TodoReminder $reminder
+     *
+     * @throws Exception\InvalidReminder
+     */
+    public function addReminder(UserId $userId, TodoReminder $reminder): void
+    {
+        if (!$this->assigneeId()->equals($userId)) {
+            throw Exception\InvalidReminder::userIsNotAssignee($userId, $this->assigneeId());
+        }
+        if ($reminder->isInThePast()) {
+            throw Exception\InvalidReminder::reminderInThePast($reminder);
+        }
+        if ($this->status->equals(TodoStatus::DONE())) {
+            throw Exception\TodoNotOpen::triedToAddReminder($reminder, $this->status);
+        }
+        $this->recordThat(ReminderWasAddedToTodo::byUserToDate($this->id, $this->assigneeId, $reminder));
+    }
+
     private function isMarkedAsExpired(): bool
     {
         return $this->status->equals(TodoStatus::EXPIRED());
@@ -149,6 +174,22 @@ class Todo implements AggregateRoot
         return $this->status;
     }
 
+    /**
+     * @return TodoDeadline|null
+     */
+    public function deadline(): ?TodoDeadline
+    {
+        return $this->deadline;
+    }
+
+    /**
+     * @return TodoReminder|null
+     */
+    public function reminder(): ?TodoReminder
+    {
+        return $this->reminder;
+    }
+
     private function applyTodoWasPosted(TodoWasPosted $event): void
     {
         $this->id = $event->todoId();
@@ -165,5 +206,11 @@ class Todo implements AggregateRoot
     private function applyDeadlineWasAddedToTodo(DeadlineWasAddedToTodo $event): void
     {
         $this->deadline = $event->deadline();
+    }
+
+    private function applyReminderWasAddedToTodo(ReminderWasAddedToTodo $event): void
+    {
+        $this->reminder = $event->reminder();
+        $this->reminded = false;
     }
 }
