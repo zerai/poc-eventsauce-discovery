@@ -30,12 +30,12 @@ class UserProjection extends AbstractProjection implements UserProjectionPort, C
 
     public function handle(Message $message)
     {
-        if ($this->isProjectabile($message)) {
+        if ($this->isProjectable($message)) {
             $this->project($message);
         }
     }
 
-    public function isProjectabile(Message $message): bool
+    public function isProjectable(Message $message): bool
     {
         if (!in_array(get_class($message->event()), $this::PROJECTABLE_EVENTS)) {
             return false;
