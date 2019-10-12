@@ -9,7 +9,7 @@ use TodoApp\Domain\Model\Todo\TodoId;
 use TodoApp\Domain\Model\Todo\TodoReminder;
 use TodoApp\Domain\Model\User\UserId;
 
-final class ReminderWasAddedToTodo implements SerializablePayload
+final class TodoAssigneeWasReminded implements SerializablePayload
 {
     /**
      * @var TodoId
@@ -53,7 +53,7 @@ final class ReminderWasAddedToTodo implements SerializablePayload
 
     public static function fromPayload(array $payload): SerializablePayload
     {
-        return new ReminderWasAddedToTodo(
+        return new TodoAssigneeWasReminded(
             TodoId::fromString($payload['todo_id']),
             UserId::fromString($payload['user_id']),
             TodoReminder::from($payload['reminder'], $payload['reminder_status'])
@@ -70,9 +70,9 @@ final class ReminderWasAddedToTodo implements SerializablePayload
         ];
     }
 
-    public static function byUserToDate(TodoId $todoId, UserId $userId, TodoReminder $reminder): ReminderWasAddedToTodo
+    public static function forAssignee(TodoId $todoId, UserId $userId, TodoReminder $reminder): TodoAssigneeWasReminded
     {
-        return new ReminderWasAddedToTodo(
+        return new TodoAssigneeWasReminded(
             $todoId,
             $userId,
             $reminder

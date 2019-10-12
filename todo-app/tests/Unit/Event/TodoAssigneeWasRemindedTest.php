@@ -5,42 +5,41 @@ declare(strict_types=1);
 namespace TodoApp\Tests\Unit\Event;
 
 use PHPUnit\Framework\TestCase;
-use TodoApp\Domain\Model\Todo\Event\ReminderWasAddedToTodo;
+use TodoApp\Domain\Model\Todo\Event\TodoAssigneeWasReminded;
 use TodoApp\Domain\Model\Todo\TodoId;
 use TodoApp\Domain\Model\Todo\TodoReminder;
-use TodoApp\Domain\Model\Todo\TodoReminderStatus;
 use TodoApp\Domain\Model\User\UserId;
 
-class ReminderWasAddedToTodoTest extends TestCase
+class TodoAssigneeWasRemindedTest extends TestCase
 {
-    private const REMINDER_DATE = '2050-01-01 10:00:00';
+    private const REMINDER_DATE = '2050-01-01 10:00';
 
     /** @test */
     public function can_be_created_from_payload(): void
     {
         $todoId = TodoId::generate();
         $userId = UserId::generate();
-        $reminder = TodoReminder::from(self::REMINDER_DATE, $reminderStatus = TodoReminderStatus::OPEN()->name());
+        $reminder = TodoReminder::from(self::REMINDER_DATE, 'OPEN');
 
-        $event = ReminderWasAddedToTodo::fromPayload([
+        $event = TodoAssigneeWasReminded::fromPayload([
             'todo_id' => $todoId->toString(),
             'user_id' => $userId->toString(),
             'reminder' => $reminder->toString(),
             'reminder_status' => $reminder->status()->toString(),
         ]);
 
-        self::assertInstanceOf(ReminderWasAddedToTodo::class, $event);
+        self::assertInstanceOf(TodoAssigneeWasReminded::class, $event);
         self::assertTrue($todoId->equals($event->todoId()));
-        self::assertTrue($reminder->sameValueAs($event->reminder()));
         self::assertTrue($userId->equals($event->userId()));
+        self::assertTrue($reminder->sameValueAs($event->reminder()));
     }
 
     /** @test */
-    public function can_return_payload_as_array(): void
+    public function can_return_the_payload_as_array(): void
     {
         $todoId = TodoId::generate();
         $userId = UserId::generate();
-        $reminder = TodoReminder::from(self::REMINDER_DATE, $reminderStatus = TodoReminderStatus::OPEN()->name());
+        $reminder = TodoReminder::from(self::REMINDER_DATE, 'OPEN');
         $expectedPayload = [
             'todo_id' => $todoId->toString(),
             'user_id' => $userId->toString(),
@@ -48,7 +47,7 @@ class ReminderWasAddedToTodoTest extends TestCase
             'reminder_status' => $reminder->status()->toString(),
         ];
 
-        $event = new ReminderWasAddedToTodo($todoId, $userId, $reminder);
+        $event = new TodoAssigneeWasReminded($todoId, $userId, $reminder);
 
         self::assertEquals($expectedPayload, $event->toPayload());
     }

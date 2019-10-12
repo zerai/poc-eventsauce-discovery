@@ -7,6 +7,7 @@ namespace TodoApp\Domain\Model\Todo;
 use EventSauce\EventSourcing\AggregateRoot;
 use TodoApp\Domain\Model\Todo\Event\DeadlineWasAddedToTodo;
 use TodoApp\Domain\Model\Todo\Event\ReminderWasAddedToTodo;
+use TodoApp\Domain\Model\Todo\Event\TodoAssigneeWasReminded;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsExpired;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
@@ -93,15 +94,17 @@ class Todo implements AggregateRoot
      */
     public function markAsExpired(): void
     {
-        $status = TodoStatus::EXPIRED();
+        $desiredStatus = TodoStatus::EXPIRED();
+
         if (!$this->status->equals(TodoStatus::OPEN()) || $this->status->equals(TodoStatus::EXPIRED())) {
             throw Exception\TodoNotOpen::triedToExpire($this->status);
         }
+
         if ($this->deadline->isMet()) {
             throw Exception\TodoNotExpired::withDeadline($this->deadline, $this);
         }
         // TODO haldle this in test
-        $this->recordThat(TodoWasMarkedAsExpired::fromStatus($this->id, $this->status, $status, $this->assigneeId));
+        $this->recordThat(TodoWasMarkedAsExpired::fromStatus($this->id, $this->status, $desiredStatus, $this->assigneeId));
     }
 
     /**
@@ -110,11 +113,13 @@ class Todo implements AggregateRoot
     public function unmarkAsExpired(): void
     {
         //TODO manca applyTodoWasUnmarkedAsExpired
-        $status = TodoStatus::OPEN();
+        $desiredStatus = TodoStatus::OPEN();
+
         if (!$this->isMarkedAsExpired()) {
             throw Exception\TodoNotExpired::withDeadline($this->deadline, $this);
         }
-        $this->recordThat(TodoWasUnmarkedAsExpired::fromStatus($this->id, $this->status, $status, $this->assigneeId));
+
+        $this->recordThat(TodoWasUnmarkedAsExpired::fromStatus($this->id, $this->status, $desiredStatus, $this->assigneeId));
     }
 
     /**
@@ -128,13 +133,42 @@ class Todo implements AggregateRoot
         if (!$this->assigneeId()->equals($userId)) {
             throw Exception\InvalidReminder::userIsNotAssignee($userId, $this->assigneeId());
         }
+
         if ($reminder->isInThePast()) {
             throw Exception\InvalidReminder::reminderInThePast($reminder);
         }
+
         if ($this->status->equals(TodoStatus::DONE())) {
             throw Exception\TodoNotOpen::triedToAddReminder($reminder, $this->status);
         }
+
         $this->recordThat(ReminderWasAddedToTodo::byUserToDate($this->id, $this->assigneeId, $reminder));
+    }
+
+    /**
+     * @param TodoReminder $reminder
+     *
+     * @throws Exception\InvalidReminder
+     */
+    public function remindAssignee(TodoReminder $reminder): void
+    {
+        if ($this->status->equals(TodoStatus::DONE())) {
+            throw Exception\TodoNotOpen::triedToAddReminder($reminder, $this->status);
+        }
+
+        if (!$this->reminder->sameValueAs($reminder)) {
+            throw Exception\InvalidReminder::reminderNotCurrent($this->reminder, $reminder);
+        }
+
+        if (!$this->reminder->isOpen()) {
+            throw Exception\InvalidReminder::alreadyReminded();
+        }
+
+        if ($reminder->isInTheFuture()) {
+            throw Exception\InvalidReminder::reminderInTheFuture($reminder);
+        }
+
+        $this->recordThat(TodoAssigneeWasReminded::forAssignee($this->id, $this->assigneeId, $reminder->close()));
     }
 
     private function isMarkedAsExpired(): bool
@@ -203,6 +237,14 @@ class Todo implements AggregateRoot
         $this->status = $event->newStatus();
     }
 
+    /**
+     * @param TodoWasMarkedAsExpired $event
+     */
+    private function applyTodoWasMarkedAsExpired(TodoWasMarkedAsExpired $event)
+    {
+        $this->status = $event->newStatus();
+    }
+
     private function applyDeadlineWasAddedToTodo(DeadlineWasAddedToTodo $event): void
     {
         $this->deadline = $event->deadline();
@@ -212,5 +254,11 @@ class Todo implements AggregateRoot
     {
         $this->reminder = $event->reminder();
         $this->reminded = false;
+    }
+
+    private function applyTodoAssigneeWasReminded(TodoAssigneeWasReminded $event): void
+    {
+        $this->reminder = $event->reminder();
+        $this->reminded = true;
     }
 }
