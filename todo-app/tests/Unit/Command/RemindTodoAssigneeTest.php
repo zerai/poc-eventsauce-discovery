@@ -32,6 +32,7 @@ class RemindTodoAssigneeTest extends TestCase
         self::assertEquals($command->reminderStatus()->toString(), $reminderStatus);
     }
 
+    /** @test */
     public function can_return_the_payload_as_array(): void
     {
         $todoId = TodoId::generate();
@@ -42,5 +43,9 @@ class RemindTodoAssigneeTest extends TestCase
             'reminder' => $todoReminder->toString(),
             'reminder_status' => $reminderStatus,
         ];
+
+        $command = new RemindTodoAssignee($todoId, $todoReminder, TodoReminderStatus::fromName($reminderStatus));
+
+        self::assertEquals($expectedPayload, $command->toPayload());
     }
 }

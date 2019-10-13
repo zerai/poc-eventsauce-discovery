@@ -11,6 +11,7 @@ use TodoApp\Domain\Model\Todo\Event\TodoAssigneeWasReminded;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsDone;
 use TodoApp\Domain\Model\Todo\Event\TodoWasMarkedAsExpired;
 use TodoApp\Domain\Model\Todo\Event\TodoWasPosted;
+use TodoApp\Domain\Model\Todo\Event\TodoWasReopened;
 use TodoApp\Domain\Model\Todo\Event\TodoWasUnmarkedAsExpired;
 use TodoApp\Domain\Model\User\UserId;
 
@@ -171,6 +172,14 @@ class Todo implements AggregateRoot
         $this->recordThat(TodoAssigneeWasReminded::forAssignee($this->id, $this->assigneeId, $reminder->close()));
     }
 
+    public function reopenTodo(): void
+    {
+        if (!$this->status->equals(TodoStatus::DONE())) {
+            throw Exception\CannotReopenTodo::notMarkedDone($this);
+        }
+        $this->recordThat(TodoWasReopened::withStatus($this->id, TodoStatus::OPEN(), $this->assigneeId));
+    }
+
     private function isMarkedAsExpired(): bool
     {
         return $this->status->equals(TodoStatus::EXPIRED());
@@ -260,5 +269,10 @@ class Todo implements AggregateRoot
     {
         $this->reminder = $event->reminder();
         $this->reminded = true;
+    }
+
+    private function applyTodoWasReopened(TodoWasReopened $event): void
+    {
+        $this->status = $event->status();
     }
 }

@@ -32,6 +32,8 @@ class DeadlineWasAddedToTodoTest extends TestCase
         self::assertTrue($todoId->equals($event->todoId()));
         //self::assertEquals($deadline->sameValueAs($event->deadline()));
         self::assertTrue($userId->equals($event->userId()));
+
+        self::assertEquals($deadline->toString(), $event->deadline()->toString());
     }
 
     /** @test */
