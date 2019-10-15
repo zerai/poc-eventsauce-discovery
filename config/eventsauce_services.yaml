@@ -25,13 +25,29 @@ services:
         alias: 'eventsauce.message_dispatcher.synchronous'
 
     #
-    #   EVENTSAUCE INFLECTOR
+    #   CUSTOM TODO-APP INFLECTOR
+    #
+    todo-app.event_map:
+        class: TodoApp\Infrastructure\EventSauce\ClassNameInflector\EventClassMap
+
+    eventsauce.inflector.event_class_map:
+        class: EventSauceTools\ClassMapInflector\ClassMapInflector
+        arguments:
+            - '@todo-app.event_map'
+
+    eventsauce.inflector:
+        alias: 'eventsauce.inflector.event_class_map'
+
+
+
+    #
+    #   EVENTSAUCE INFLECTOR (DEFAULT)
     #
     eventsauce.inflector.dot_separated_snake_case:
         class: EventSauce\EventSourcing\DotSeparatedSnakeCaseInflector
 
-    eventsauce.inflector:
-        alias: 'eventsauce.inflector.dot_separated_snake_case'
+    #eventsauce.inflector:
+        #alias: 'eventsauce.inflector.dot_separated_snake_case'
 
 
 

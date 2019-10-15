@@ -13,7 +13,6 @@ parameters:
 
     ignoreErrors:
         #- '##'
-        - '#Method TodoApp\\Infrastructure\\EventSauce\\ClassNameInflector\\EventNameMapInflector::typeToClassName\(\) should return string but returns int|string.#'
         - '#Method TodoApp\\Infrastructure\\EventSauce\\UserRepository\\UserRepository::ofId\(\) should return TodoApp\\Domain\\Model\\User\\User but returns object.#'
         - '#Cannot call method markAsDone\(\) on TodoApp\\Domain\\Model\\Todo\\Todo|null.#'
 

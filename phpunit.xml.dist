@@ -25,13 +25,16 @@
         <testsuite name="Lib CompostDDD Messaging Suite">
             <directory>lib/CompostDDD/messaging/tests</directory>
         </testsuite>
-
+        <testsuite name="EventSauce Tools Suite">
+            <directory>lib/EventSauceTools/tests</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>src</directory>
             <directory>todo-app/src</directory>
+            <directory>lib/EventSauceTools/src</directory>
             <exclude>
                 <file>src/Kernel.php</file>
                 <directory>src/Migrations/</directory>

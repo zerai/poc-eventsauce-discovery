@@ -53,17 +53,6 @@ services:
         public: true
 
 
-#    TodoApp\Infrastructure\EventSauce\Decorator\YourDecorator:
-#        public: true
-#
-#    TodoApp\Infrastructure\EventSauce\Decorator\EventAliasDecorator:
-#        #public: true
-#
-#    TodoApp\Infrastructure\EventSauce\ClassNameInflector\EventNameMapInflector:
-#
-#
-#
-#
     TodoApp\Infrastructure\EventSauce\UserRepository\UserRepository:
         public: true
 
