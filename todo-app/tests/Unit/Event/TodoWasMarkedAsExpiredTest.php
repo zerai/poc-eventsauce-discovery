@@ -35,6 +35,28 @@ class TodoWasMarkedAsExpiredTest extends TestCase
     }
 
     /** @test */
+    public function can_be_created_from_static_method(): void
+    {
+        $todoId = TodoId::generate();
+        $oldStatus = TodoStatus::OPEN();
+        $newStatus = TodoStatus::EXPIRED();
+        $assigneeId = UserId::generate();
+
+        $event = TodoWasMarkedAsExpired::fromStatus(
+            $todoId,
+            $oldStatus,
+            $newStatus,
+            $assigneeId
+        );
+
+        self::assertInstanceOf(TodoWasMarkedAsExpired::class, $event);
+        self::assertTrue($todoId->equals($event->todoId()));
+        self::assertTrue($oldStatus->equals($event->oldStatus()));
+        self::assertTrue($newStatus->equals($event->newStatus()));
+        self::assertTrue($assigneeId->equals($event->assigneeId()));
+    }
+
+    /** @test */
     public function can_return_array_as_payload(): void
     {
         $todoId = TodoId::generate();

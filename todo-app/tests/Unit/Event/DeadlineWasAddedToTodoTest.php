@@ -37,6 +37,27 @@ class DeadlineWasAddedToTodoTest extends TestCase
     }
 
     /** @test */
+    public function can_be_created_from_static_method(): void
+    {
+        $todoId = TodoId::generate();
+        $deadline = TodoDeadline::fromString(self::FUTURE_DEADLINE);
+        $userId = UserId::generate();
+
+        $event = DeadlineWasAddedToTodo::byUserToDate(
+            $todoId,
+            $userId,
+            $deadline
+        );
+
+        self::assertInstanceOf(DeadlineWasAddedToTodo::class, $event);
+        self::assertTrue($todoId->equals($event->todoId()));
+        //self::assertEquals($deadline->sameValueAs($event->deadline()));
+        self::assertTrue($userId->equals($event->userId()));
+
+        self::assertEquals($deadline->toString(), $event->deadline()->toString());
+    }
+
+    /** @test */
     public function can_return_payload_as_array(): void
     {
         $todoId = TodoId::generate();
@@ -51,5 +72,6 @@ class DeadlineWasAddedToTodoTest extends TestCase
         $event = new DeadlineWasAddedToTodo($todoId, $userId, $deadline);
 
         self::assertEquals($expectedPayload, $event->toPayload());
+        self::assertInstanceOf(DeadlineWasAddedToTodo::class, $event);
     }
 }
