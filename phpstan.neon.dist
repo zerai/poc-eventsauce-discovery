@@ -13,7 +13,6 @@ parameters:
 
     ignoreErrors:
         #- '##'
-        - '#Method TodoApp\\Infrastructure\\EventSauce\\UserRepository\\UserRepository::ofId\(\) should return TodoApp\\Domain\\Model\\User\\User but returns object.#'
         - '#Cannot call method markAsDone\(\) on TodoApp\\Domain\\Model\\Todo\\Todo|null.#'
 
 
@@ -28,6 +27,8 @@ parameters:
         #- Command/WireUserAddCommand.php
         - todo-app/src/Domain/Model/Todo/TodoAggregateRootBehaviourWithRequiredHistory.php
         - todo-app/src/Infrastructure/EventSauce/TodoRepository/TodoRepository.php
+        - todo-app/src/Domain/Model/User/UserAggregateRootBehaviourWithRequiredHistory.php
+        - todo-app/src/Infrastructure/EventSauce/UserRepository/UserRepository.php
 
 
 

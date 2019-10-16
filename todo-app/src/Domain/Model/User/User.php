@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\User;
 
 use EventSauce\EventSourcing\AggregateRoot;
-use EventSauce\EventSourcing\AggregateRootBehaviour;
 use TodoApp\Domain\Model\User\Event\UserNameWasChanged;
 use TodoApp\Domain\Model\User\Event\UserWasRegistered;
 
 class User implements AggregateRoot
 {
-    use AggregateRootBehaviour;
+    use UserAggregateRootBehaviourWithRequiredHistory;
 
     /** @var UserId */
     private $id;
