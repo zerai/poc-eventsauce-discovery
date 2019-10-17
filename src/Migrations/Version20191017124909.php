@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191008224710 extends AbstractMigration
+final class Version20191017124909 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -26,7 +26,7 @@ final class Version20191008224710 extends AbstractMigration
         $this->addSql('CREATE TABLE todo_projection (todo_id VARCHAR(36) NOT NULL COLLATE utf8_unicode_ci, todo_text LONGTEXT NOT NULL COLLATE utf8_unicode_ci, user_id VARCHAR(36) NOT NULL COLLATE utf8_unicode_ci, status VARCHAR(15) NOT NULL COLLATE utf8_unicode_ci, PRIMARY KEY(todo_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql('CREATE TABLE user_projection (user_id VARCHAR(36) NOT NULL COLLATE utf8_unicode_ci, user_name VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, email VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, PRIMARY KEY(user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
+        $this->addSql('CREATE TABLE user_projection (user_id VARCHAR(36) NOT NULL COLLATE utf8_unicode_ci, password VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, email VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, PRIMARY KEY(user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = \'\' ');
     }
 
     public function down(Schema $schema) : void

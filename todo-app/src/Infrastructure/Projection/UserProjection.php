@@ -47,16 +47,16 @@ class UserProjection extends AbstractProjection implements UserProjectionPort, C
     public function projectWhenUserWasRegistered(UserWasRegistered $event): void
     {
         $tableName = $this::TABLE_NAME;
-        $sql = "INSERT INTO $tableName (`user_id`, `user_name`, `email`)
-                VALUES (:user_id, :user_name, :email);"
+        $sql = "INSERT INTO $tableName (`user_id`, `password`, `email`)
+                VALUES (:user_id, :password, :email);"
         ;
 
         $stmt = $this->connection->prepare($sql);
 
         $stmt->execute([
             ':user_id' => (string) $event->userId()->toString(),
-            ':user_name' => $event->username(),
-            ':email' => $event->email(),
+            ':email' => (string) $event->email()->toString(),
+            ':password' => (string) $event->password()->toString(),
         ]);
     }
 

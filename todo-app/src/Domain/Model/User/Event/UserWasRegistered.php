@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\User\Event;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
+use TodoApp\Domain\Model\User\UserEmail;
 use TodoApp\Domain\Model\User\UserId;
+use TodoApp\Domain\Model\User\UserPassword;
 
 final class UserWasRegistered implements SerializablePayload
 {
@@ -15,46 +17,35 @@ final class UserWasRegistered implements SerializablePayload
     private $userId;
 
     /**
-     * @var string
-     */
-    private $userName;
-
-    /**
-     * @var string
+     * @var UserEmail
      */
     private $email;
 
-    public function __construct(
-        UserId $userId,
-        string $userName,
-        string $email
-    ) {
+    /**
+     * @var UserPassword
+     */
+    private $password;
+
+    /**
+     * UserWasRegistered constructor.
+     *
+     * @param UserId       $userId
+     * @param UserEmail    $email
+     * @param UserPassword $password
+     */
+    public function __construct(UserId $userId, UserEmail $email, UserPassword $password)
+    {
         $this->userId = $userId;
-        $this->userName = $userName;
         $this->email = $email;
-    }
-
-    public function userId(): UserId
-    {
-        return $this->userId;
-    }
-
-    public function userName(): string
-    {
-        return $this->userName;
-    }
-
-    public function email(): string
-    {
-        return $this->email;
+        $this->password = $password;
     }
 
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new UserWasRegistered(
             UserId::fromString($payload['user_id']),
-            (string) $payload['user_name'],
-            (string) $payload['email']
+            UserEmail::fromString($payload['email']),
+            UserPassword::fromString($payload['password'])
         );
     }
 
@@ -62,8 +53,23 @@ final class UserWasRegistered implements SerializablePayload
     {
         return [
             'user_id' => $this->userId()->toString(),
-            'user_name' => (string) $this->userName,
-            'email' => (string) $this->email,
+            'email' => $this->email()->toString(),
+            'password' => $this->password()->toString(),
         ];
+    }
+
+    public function userId(): UserId
+    {
+        return $this->userId;
+    }
+
+    public function password(): UserPassword
+    {
+        return $this->password;
+    }
+
+    public function email(): UserEmail
+    {
+        return $this->email;
     }
 }

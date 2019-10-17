@@ -8,6 +8,8 @@ use EventSauce\EventSourcing\Message;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use TodoApp\Domain\Model\User\Event\UserWasRegistered;
+use TodoApp\Domain\Model\User\UserEmail;
+use TodoApp\Domain\Model\User\UserPassword;
 use TodoApp\Infrastructure\Projection\UserProjection;
 
 class UserProjectionTest extends KernelTestCase
@@ -29,8 +31,8 @@ class UserProjectionTest extends KernelTestCase
     {
         $event = UserWasRegistered::fromPayload([
             'user_id' => Uuid::uuid4()->toString(),
-            'user_name' => 'irrelevant user name',
-            'email' => 'irrelevant@example.com',
+            'email' => UserEmail::fromString('irrelevant@example.com')->toString(),
+            'password' => UserPassword::fromString('irrelevant')->toString(),
         ]);
 
         $message = new Message($event);

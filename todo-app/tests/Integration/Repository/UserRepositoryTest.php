@@ -7,7 +7,9 @@ namespace TodoApp\Tests\Integration\Repository;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use TodoApp\Domain\Model\User\User;
+use TodoApp\Domain\Model\User\UserEmail;
 use TodoApp\Domain\Model\User\UserId;
+use TodoApp\Domain\Model\User\UserPassword;
 
 class UserRepositoryTest extends KernelTestCase
 {
@@ -30,8 +32,8 @@ class UserRepositoryTest extends KernelTestCase
         //self::markTestSkipped();
         $user = User::register(
             UserId::generate(),
-            'my username',
-            'irrelevant@example.com'
+            UserEmail::fromString('irrelevant@example.com'),
+            UserPassword::fromString('irrelevant')
         );
 
         $this->userRepository->persist($user);
@@ -43,15 +45,15 @@ class UserRepositoryTest extends KernelTestCase
         /** @var User $user */
         $user = User::register(
             $userId = UserId::generate(),
-            'my username',
-            'irrelevant@example.com'
+            UserEmail::fromString('irrelevant@example.com'),
+            UserPassword::fromString('irrelevant')
         );
 
         $this->userRepository->persist($user);
 
-        $retrivedUser = $this->userRepository->retrieve($userId);
+        $retrievedUser = $this->userRepository->retrieve($userId);
 
-        self::assertEquals($userId, $retrivedUser->id());
+        self::assertEquals($userId, $retrievedUser->id());
     }
 
     protected function tearDown(): void

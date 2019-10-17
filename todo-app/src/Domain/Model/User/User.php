@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TodoApp\Domain\Model\User;
 
 use EventSauce\EventSourcing\AggregateRoot;
-use TodoApp\Domain\Model\User\Event\UserNameWasChanged;
 use TodoApp\Domain\Model\User\Event\UserWasRegistered;
 
 class User implements AggregateRoot
@@ -15,33 +14,25 @@ class User implements AggregateRoot
     /** @var UserId */
     private $id;
 
-    /** @var string */
-    private $userName;
-
-    /** @var string */
+    /** @var UserEmail */
     private $email;
+
+    /** @var UserPassword */
+    private $password;
 
     public static function register(
         UserId $userId,
-        string $userName,
-        string $email
+        UserEmail $email,
+        UserPassword $password
     ): User {
         $user = new self($userId);
         $user->recordThat(UserWasRegistered::fromPayload([
             'user_id' => $userId->toString(),
-            'user_name' => $userName,
-            'email' => $email,
+            'email' => $email->toString(),
+            'password' => $password->toString(),
         ]));
 
         return $user;
-    }
-
-    public function changeUserName(UserId $userId, string $userName): void
-    {
-        $this->recordThat(UserNameWasChanged::fromPayload([
-            'user_id' => $userId->toString(),
-            'user_name' => $userName,
-        ]));
     }
 
     /**
@@ -53,30 +44,25 @@ class User implements AggregateRoot
     }
 
     /**
-     * @return string
+     * @return UserEmail
      */
-    public function userName(): string
+    public function email(): UserEmail
     {
-        return $this->userName;
+        return $this->email;
     }
 
     /**
-     * @return string
+     * @return UserPassword
      */
-    public function email(): string
+    public function password(): UserPassword
     {
-        return $this->email;
+        return $this->password;
     }
 
     private function applyUserWasRegistered(UserWasRegistered $event): void
     {
         $this->id = $event->userId();
-        $this->userName = $event->userName();
         $this->email = $event->email();
-    }
-
-    private function applyUserNameWasChanged(UserNameWasChanged $event): void
-    {
-        $this->userName = $event->userName();
+        $this->password = $event->password();
     }
 }
